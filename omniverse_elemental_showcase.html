@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OMNIVERSE — Elemental Power</title>
+
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {  
+    min-height: 100%;
+    background: #03030c;
+    color: #fff;
+    font-family: Arial, sans-serif;
+    overflow-x: hidden;
+    isolation: isolate;
+}
+
+/* LIVING GALAXY BACKGROUND */
+body::before {
+    content: "";
+    position: fixed;
+    inset: -35%;
+    z-index: -2;
+    pointer-events: none;
+    background:
+        radial-gradient(ellipse at 18% 28%, rgba(106, 36, 255, .28), transparent 34%),
+        radial-gradient(ellipse at 78% 42%, rgba(0, 156, 255, .20), transparent 32%),
+        radial-gradient(ellipse at 52% 82%, rgba(255, 0, 130, .16), transparent 34%),
+        radial-gradient(ellipse at 50% 50%, #10102b 0%, #03030c 65%);
+    filter: blur(12px);
+    animation: nebulaDrift 22s ease-in-out infinite alternate;
+}
+body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    opacity: .8;
+    background-image:
+        radial-gradient(2px 2px at 8% 18%, #fff, transparent 60%),
+        radial-gradient(1px 1px at 22% 72%, #b9c8ff, transparent 60%),
+        radial-gradient(2px 2px at 38% 35%, #fff, transparent 60%),
+        radial-gradient(1px 1px at 54% 85%, #fff, transparent 60%),
+        radial-gradient(2px 2px at 69% 17%, #d9c7ff, transparent 60%),
+        radial-gradient(1px 1px at 83% 57%, #fff, transparent 60%),
+        radial-gradient(2px 2px at 94% 88%, #b8eaff, transparent 60%);
+    background-size: 340px 340px;
+    animation: starDrift 45s linear infinite;
+}
+@keyframes nebulaDrift {
+    from { transform: rotate(-8deg) scale(1); }
+    to { transform: rotate(9deg) scale(1.16); }
+}
+@keyframes starDrift {
+    to { background-position: 340px 680px; }
+}
+
+/* NAVBAR */
+nav {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    padding: 22px 8%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(5, 5, 18, .62);
+    backdrop-filter: blur(18px);
+    border-bottom: 1px solid rgba(255,255,255,.08);
+    z-index: 100;
+}
+.logo {
+    font-size: 23px;
+    font-weight: 800;
+    letter-spacing: 3px;
+    color: #c4b5fd;
+    text-shadow: 0 0 18px rgba(167,139,250,.8);
+}
+nav a {
+    color: #eee;
+    text-decoration: none;
+    margin-left: 25px;
+    transition: color .25s;
+}
+nav a:hover { color: #a78bfa; }
+
+/* HERO */
+.hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 100px 20px 40px;
+}
+.hero .eyebrow {
+    color: #b9a5ff;
+    letter-spacing: 6px;
+    font-size: 12px;
+    margin-bottom: 20px;
+}
+.hero h1 {
+    font-size: clamp(45px, 8vw, 92px);
+    letter-spacing: -3px;
+    background: linear-gradient(100deg, #fff, #b69aff 45%, #5bdcff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    filter: drop-shadow(0 0 24px rgba(139,92,246,.25));
+}
+.hero p {
+    color: #b9b8ca;
+    margin-top: 20px;
+    font-size: 18px;
+}
+.hero button {
+    margin-top: 35px;
+    padding: 15px 34px;
+    border: 1px solid rgba(255,255,255,.2);
+    border-radius: 30px;
+    background: linear-gradient(100deg, #7c3aed, #2563eb);
+    color: white;
+    cursor: pointer;
+    font-size: 15px;
+    box-shadow: 0 0 28px rgba(124,58,237,.35);
+    transition: transform .3s, box-shadow .3s;
+}
+.hero button:hover {
+    transform: translateY(-4px) scale(1.05);
+    box-shadow: 0 0 42px rgba(124,58,237,.75);
+}
+
+/* PROJECT SECTION / SCROLL STAGE */
+.projects {
+    height: 300vh;
+    position: relative;
+}
+.sticky-area {
+    height: 100vh;
+    position: sticky;
+    top: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    perspective: 1300px;
+    overflow: hidden;
+}
+.section-title {
+    position: absolute;
+    top: 12%;
+    text-align: center;
+    z-index: 5;
+}
+.section-title h2 {
+    font-size: clamp(30px, 5vw, 46px);
+    background: linear-gradient(90deg, #fff, #bca7ff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+.section-title p {
+    color: #a6a4ba;
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+/* ORBITING CARDS */
+.carousel {
+    position: relative;
+    width: 230px;
+    height: 300px;
+    transform-style: preserve-3d;
+    will-change: transform;
+}
+.card {
+    position: absolute;
+    width: 230px;
+    height: 300px;
+    left: 0;
+    top: 0;
+    transform-style: preserve-3d;
+    cursor: pointer;
+    --rx: 0deg;
+    --ry: 0deg;
+}
+.card-inner {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    isolation: isolate;
+    border: 1px solid rgba(255,255,255,.2);
+    border-radius: 25px;
+    padding: 25px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    background: linear-gradient(145deg, #24134b, #090d25);
+    box-shadow: 0 22px 55px rgba(0,0,0,.55);
+    transform-style: preserve-3d;
+    transform: rotateX(var(--rx)) rotateY(var(--ry)) scale(1);
+    transition: transform .18s ease-out, box-shadow .35s, border-color .35s, filter .35s;
+}
+.card-inner > *:not(.power) {
+    position: relative;
+    z-index: 3;
+    transform: translateZ(32px);
+    transition: transform .35s;
+}
+.card span { font-size: 43px; margin-bottom: 13px; }
+.card h3 { font-size: 22px; margin-bottom: 9px; letter-spacing: 1px; }
+.card p { color: #e0e1ee; font-size: 13px; line-height: 1.55; }
+.card:hover .card-inner {
+    transform: rotateX(var(--rx)) rotateY(var(--ry)) scale(1.075);
+    border-color: rgba(255,255,255,.8);
+    filter: brightness(1.16);
+}
+.card:hover .card-inner > *:not(.power) {
+    transform: translateZ(58px);
+}
+.card:hover .card-inner {
+    box-shadow: 0 0 22px var(--glow), 0 0 55px var(--glow), 0 25px 65px rgba(0,0,0,.55);
+}
+
+/* ELEMENT COLOR THEMES */
+.fire { --glow: rgba(255,75,15,.9); }
+.fire .card-inner { background: linear-gradient(145deg, #8f250e, #260b20 78%); }
+.water { --glow: rgba(0,180,255,.9); }
+.water .card-inner { background: linear-gradient(145deg, #075b91, #071a3b 78%); }
+.air { --glow: rgba(145,235,255,.9); }
+.air .card-inner { background: linear-gradient(145deg, #276b86, #101d3b 78%); }
+.earth { --glow: rgba(65,220,115,.85); }
+.earth .card-inner { background: linear-gradient(145deg, #17613e, #10271e 78%); }
+.lightning { --glow: rgba(255,225,65,.95); }
+.lightning .card-inner { background: linear-gradient(145deg, #755313, #211b36 78%); }
+.cosmic { --glow: rgba(175,85,255,.95); }
+.cosmic .card-inner { background: linear-gradient(145deg, #57258e, #160d35 78%); }
+
+/* POWER EFFECT LAYER */
+.power {
+    position: absolute;
+    width: 145px;
+    height: 145px;
+    top: 22px;
+    right: 18px;
+    z-index: 1;
+    opacity: 0;
+    transform: scale(.35);
+    transition: opacity .35s, transform .45s;
+    pointer-events: none;
+}
+.card:hover .power {
+    opacity: 1;
+    transform: scale(1);
+}
+
+/* FIRE: glowing flame-like energy */
+.fire .power {
+    border-radius: 48% 52% 42% 58%;
+    background:
+        radial-gradient(ellipse at 50% 72%, #fff8b0 0 7%, #ffd43b 13%, #ff6a00 34%, #e51b22 53%, transparent 72%);
+    filter: drop-shadow(0 0 17px #ff4b0f);
+    animation: fireFlicker .32s ease-in-out infinite alternate;
+}
+.fire .power::before, .fire .power::after {
+    content: "";
+    position: absolute;
+    inset: 15px 30px 5px;
+    border-radius: 50% 50% 35% 35%;
+    border: 3px solid rgba(255,210,75,.7);
+    transform: rotate(35deg);
+    filter: blur(1px);
+}
+.fire .power::after { inset: 0 45px 12px 8px; transform: rotate(-35deg); }
+@keyframes fireFlicker {
+    from { transform: scale(.95) rotate(-5deg); }
+    to { transform: scale(1.12) rotate(6deg); }
+}
+
+/* WATER: liquid orb and ripple */
+.water .power {
+    border-radius: 45% 55% 60% 40%;
+    background: radial-gradient(circle at 32% 25%, #e7fdff 0 4%, #8beaff 12%, #139ee8 40%, #064caa 68%, transparent 72%);
+    box-shadow: inset -12px -12px 24px rgba(0,20,100,.55), 0 0 28px #00bfff;
+    animation: waterFlow 3s ease-in-out infinite;
+}
+.water .power::before, .water .power::after {
+    content: "";
+    position: absolute;
+    inset: 12px -8px;
+    border: 2px solid rgba(115,225,255,.7);
+    border-radius: 50%;
+    transform: rotate(-25deg);
+}
+.water .power::after { inset: -8px 12px; transform: rotate(35deg); }
+@keyframes waterFlow {
+    50% { border-radius: 58% 42% 43% 57%; transform: rotate(18deg) scale(1.1); }
+}
+
+/* AIR: swirling wind rings */
+.air .power {
+    border: 5px solid rgba(179,245,255,.9);
+    border-left-color: transparent;
+    border-right-color: rgba(70,190,255,.5);
+    border-radius: 50%;
+    box-shadow: 0 0 20px #5bdcff, inset 0 0 20px #5bdcff;
+    animation: airSpin 1.4s linear infinite;
+}
+.air .power::before, .air .power::after {
+    content: "";
+    position: absolute;
+    inset: 17px -12px;
+    border: 3px solid rgba(205,250,255,.8);
+    border-top-color: transparent;
+    border-radius: 50%;
+    transform: rotate(45deg);
+}
+.air .power::after { inset: -12px 17px; transform: rotate(-45deg); }
+@keyframes airSpin { to { transform: rotate(360deg); } }
+
+/* EARTH: energy core with orbiting stone shards */
+.earth .power {
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, #d9ffc3 0 5%, #70e36f 17%, #188b46 48%, #073b2b 70%, transparent 73%);
+    box-shadow: 0 0 25px #37d66d, inset -12px -10px 22px rgba(0,0,0,.5);
+    animation: earthPulse 2s ease-in-out infinite alternate;
+}
+.earth .power::before, .earth .power::after {
+    content: "";
+    position: absolute;
+    width: 27px;
+    height: 22px;
+    background: linear-gradient(135deg, #b4e58b, #287d43);
+    clip-path: polygon(50% 0, 100% 35%, 75% 100%, 10% 80%, 0 25%);
+    top: -2px;
+    left: 5px;
+    filter: drop-shadow(0 0 8px #4ade80);
+    animation: rockOrbit 2.2s linear infinite;
+}
+.earth .power::after { top: auto; left: auto; right: 0; bottom: 8px; animation-delay: -1s; }
+@keyframes earthPulse { to { transform: scale(1.12); } }
+@keyframes rockOrbit { to { transform: rotate(360deg) translateX(12px); } }
+
+/* LIGHTNING: electric bolt streaks */
+.lightning .power {
+    background: linear-gradient(115deg, transparent 30%, rgba(255,245,150,.15) 40%, transparent 50%);
+    filter: drop-shadow(0 0 14px #ffe45c);
+    animation: lightningFlash .55s steps(2,end) infinite;
+}
+.lightning .power::before, .lightning .power::after {
+    content: "";
+    position: absolute;
+    width: 48px;
+    height: 125px;
+    left: 45px;
+    top: 5px;
+    background: #fff8bd;
+    clip-path: polygon(55% 0, 100% 0, 65% 42%, 100% 42%, 20% 100%, 40% 55%, 0 55%);
+    filter: drop-shadow(0 0 12px #ffe45c);
+}
+.lightning .power::after { transform: rotate(38deg) scale(.65); opacity: .7; }
+@keyframes lightningFlash { 50% { opacity: .35; } }
+
+/* COSMIC: mini galaxy vortex */
+.cosmic .power {
+    border-radius: 50%;
+    background: radial-gradient(circle, #fff 0 4%, #e9c6ff 8%, #a855f7 22%, #5420a0 45%, transparent 72%);
+    box-shadow: 0 0 28px #a855f7;
+    animation: cosmicPulse 2s ease-in-out infinite alternate;
+}
+.cosmic .power::before, .cosmic .power::after {
+    content: "";
+    position: absolute;
+    inset: 25px -12px;
+    border: 3px solid rgba(226,190,255,.85);
+    border-radius: 50%;
+    transform: rotate(35deg);
+}
+.cosmic .power::after { inset: -10px 25px; transform: rotate(-35deg); }
+@keyframes cosmicPulse { to { transform: scale(1.16) rotate(25deg); } }
+
+/* FOOTER */
+footer {
+    min-height: 50vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+    padding: 40px 20px;
+}
+footer h2 {
+    font-size: clamp(30px, 5vw, 44px);
+    text-shadow: 0 0 25px rgba(167,139,250,.5);
+}
+footer p { color: #aaa; margin-top: 15px; }
+
+/* SMALL SCREENS */
+@media (max-width: 600px) {
+    nav { padding: 18px 5%; }
+    .logo { font-size: 17px; letter-spacing: 1px; }
+    nav a { margin-left: 12px; font-size: 12px; }
+    .carousel { transform: scale(.72); }
+    .section-title { top: 13%; padding: 0 15px; width: 100%; }
+    .section-title p { font-size: 12px; }
+}
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+    }
+}
+</style>
+</head>
+
+<body>
+<nav>
+    <div class="logo">OMNIVERSE.</div>
+    <div>
+        <a href="#home">Home</a>
+        <a href="#projects">Elements</a>
+    </div>
+</nav>
+
+<section class="hero" id="home">
+    <div class="eyebrow">A UNIVERSE OF INFINITE POWER</div>
+    <h1>ENTER THE OMNIVERSE</h1>
+    <p>Discover the power hidden inside every element.</p>
+    <button onclick="document.querySelector('#projects').scrollIntoView({behavior:'smooth'})">
+        Explore Elements ↓
+    </button>
+</section>
+
+<section class="projects" id="projects">
+    <div class="sticky-area">
+        <div class="section-title">
+            <h2>Choose Your Element</h2>
+            <p>Scroll to rotate the universe · Hover to awaken its power</p>
+        </div>
+
+        <div class="carousel" id="carousel">
+            <div class="card fire">
+                <div class="card-inner">
+                    <div class="power"></div>
+                    <span>🔥</span>
+                    <h3>FIRE POWER</h3>
+                    <p>Awaken the blazing force of eternal flames.</p>
+                </div>
+            </div>
+
+            <div class="card water">
+                <div class="card-inner">
+                    <div class="power"></div>
+                    <span>🌊</span>
+                    <h3>WATER POWER</h3>
+                    <p>Command the oceans and flowing energy.</p>
+                </div>
+            </div>
+
+            <div class="card air">
+                <div class="card-inner">
+                    <div class="power"></div>
+                    <span>🌪️</span>
+                    <h3>AIR POWER</h3>
+                    <p>Master the invisible force of the wind.</p>
+                </div>
+            </div>
+
+            <div class="card earth">
+                <div class="card-inner">
+                    <div class="power"></div>
+                    <span>🌍</span>
+                    <h3>EARTH POWER</h3>
+                    <p>Awaken ancient energy from deep within nature.</p>
+                </div>
+            </div>
+
+            <div class="card lightning">
+                <div class="card-inner">
+                    <div class="power"></div>
+                    <span>⚡</span>
+                    <h3>LIGHTNING</h3>
+                    <p>Unleash the electric force of thunder.</p>
+                </div>
+            </div>
+
+            <div class="card cosmic">
+                <div class="card-inner">
+                    <div class="power"></div>
+                    <span>✨</span>
+                    <h3>COSMIC POWER</h3>
+                    <p>Harness the infinite energy of the universe.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<footer>
+    <h2>THE UNIVERSE IS YOURS</h2>
+    <p>OMNIVERSE · Unleash your elements ✨</p>
+</footer>
+
+<script>
+const carousel = document.getElementById("carousel");
+const cards = document.querySelectorAll(".card");
+const projects = document.querySelector(".projects");
+
+const total = cards.length;
+const angle = 360 / total;
+const radius = 380;
+
+/* Place cards around a 3D circle */
+cards.forEach((card, index) => {
+    const orbitAngle = index * angle;
+    card.style.transform =
+        `rotateY(${orbitAngle}deg) translateZ(${radius}px)`;
+});
+
+/* Scroll controls the whole carousel, not individual cards */
+let targetRotation = 0;
+let currentRotation = 0;
+
+function updateScrollRotation() {
+    const rect = projects.getBoundingClientRect();
+    const scrollable = projects.offsetHeight - window.innerHeight;
+    const progress = Math.max(0, Math.min(1, -rect.top / scrollable));
+    targetRotation = progress * 360;
+}
+
+window.addEventListener("scroll", updateScrollRotation, { passive: true });
+window.addEventListener("resize", updateScrollRotation);
+updateScrollRotation();
+
+function animateCarousel() {
+    currentRotation += (targetRotation - currentRotation) * 0.09;
+    carousel.style.transform =
+        `rotateY(${-currentRotation}deg) rotateX(-5deg)`;
+    requestAnimationFrame(animateCarousel);
+}
+requestAnimationFrame(animateCarousel);
+
+/* Mouse tilt affects only the inner card surface.
+   The outer card keeps its circular orbit transform. */
+cards.forEach(card => {
+    const inner = card.querySelector(".card-inner");
+
+    inner.addEventListener("mousemove", event => {
+        const rect = inner.getBoundingClientRect();
+        const x = event.clientX - rect.left;
+        const y = event.clientY - rect.top;
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+
+        const rotateX = (centerY - y) / 12;
+        const rotateY = (x - centerX) / 12;
+
+        inner.style.setProperty("--rx", `${rotateX}deg`);
+        inner.style.setProperty("--ry", `${rotateY}deg`);
+        inner.style.setProperty("--mx", `${(x / rect.width) * 100}%`);
+        inner.style.setProperty("--my", `${(y / rect.height) * 100}%`);
+    });
+
+    inner.addEventListener("mouseleave", () => {
+        inner.style.setProperty("--rx", "0deg");
+        inner.style.setProperty("--ry", "0deg");
+    });
+});
+</script>
+</body>
+</html>  
